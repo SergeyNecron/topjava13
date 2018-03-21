@@ -34,6 +34,19 @@
     </build>
 
     <dependencies>
+
+        <!--Web-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javaee</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>5</version>
+        </dependency>
     </dependencies>
 
     <profiles>
