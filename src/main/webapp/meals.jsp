@@ -51,6 +51,15 @@
 </head>
 <body>
 <h3><a href="index.html">Home</a></h3>
+<h2>Редактировать</h2>
+
+<form action="meals" method="POST">
+    <p>№:        <input type="text" name="id"></p>
+    <p>Дата:     <input type="text" name="date"></p>
+    <p>Описание: <input type="text" name="description"></p>
+    <p>Калории:  <input type="text" name="calories"></p>
+    <input type="submit" value="Отправить" />
+</form>
 
 <h2>Моя еда</h2>
     <table class = "tg">
