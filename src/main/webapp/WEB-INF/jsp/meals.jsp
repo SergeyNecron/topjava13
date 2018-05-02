@@ -12,25 +12,33 @@
 <div class="jumbotron">
     <div class="container">
         <h3><spring:message code="meal.title"/></h3>
-        <br/>
-        <form method="post" action="meals/filter">
-            <dl>
-                <dt><spring:message code="meal.startDate"/>:</dt>
-                <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.endDate"/>:</dt>
-                <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.startTime"/>:</dt>
-                <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.endTime"/>:</dt>
-                <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
-            </dl>
-            <button type="submit"><spring:message code="meal.filter"/></button>
+
+        <form class="form-horizontal" id="filter">
+            <div class="form-group">
+                <div class="col-sm-4">
+                    <spring:message code="meal.startDate"/>
+                    <input class="form-control" type="date" name="startDate" id="startDate">
+                </div>
+
+                <div class="col-sm-4">
+                    <spring:message code="meal.endDate"/>
+                    <input class="form-control" type="date" name="endDate" id="endDate">
+                </div>
+
+                <div class="col-sm-4">
+                    <spring:message code="meal.startTime"/>
+                    <input class="form-control" type="time" name="startTime" id="startTime">
+                </div>
+
+                <div class="col-sm-4">
+                    <spring:message code="meal.endTime"/>
+                    <input class="form-control" type="time" name="endTime" id="endTime">
+                </div>
+            </div>
+            <a class="btn btn-primary" type="button" onclick="updateTable()">
+                <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                <spring:message code="meal.filter"/>
+            </a>
         </form>
         <hr>
         <a class="btn btn-primary" onclick="add()">
