@@ -17,7 +17,6 @@
         <div class="row">
             <div class="col-7">
                 <div class="card">
-                    <div class="card-header"><h5><spring:message code="meal.dtFiltration"/></h5></div>
                     <div class="card-body py-0">
                         <form id="filter">
                             <div class="row">
