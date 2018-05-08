@@ -16,11 +16,21 @@ function clearFilter() {
 
 $(function () {
     datatableApi = $("#datatable").DataTable({
+        "ajax": {
+            "url": ajaxUrl,
+            "dataSrc": ""
+        },
         "paging": false,
         "info": true,
         "columns": [
             {
-                "data": "dateTime"
+                "data": "dateTime",
+                "render": function (date, type) {
+                    if (type === 'display') {
+                        return date.substring(0, 10) + ' ' + date.substring(11, 16);
+                    }
+                    return date;
+                }
             },
             {
                 "data": "description"
@@ -30,10 +40,12 @@ $(function () {
             },
             {
                 "defaultContent": "Edit",
+                "render": renderEditBtn,
                 "orderable": false
             },
             {
                 "defaultContent": "Delete",
+                "render": renderDeleteBtn,
                 "orderable": false
             }
         ],
@@ -42,7 +54,12 @@ $(function () {
                 0,
                 "desc"
             ]
-        ]
+        ],
+        "createdRow": function (row, data) {
+            if (data.exceed) {
+                $(row).addClass("exceeded");
+            }
+        },
+        "initComplete": makeEditable
     });
-    makeEditable();
 });
