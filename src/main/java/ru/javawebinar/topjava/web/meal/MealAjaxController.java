@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
-import ru.javawebinar.topjava.web.user.AdminAjaxController;
+import ru.javawebinar.topjava.util.ValidationUtil;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -38,7 +38,7 @@ public class MealAjaxController extends AbstractMealController {
 
     @PostMapping
     public ResponseEntity<String> createOrUpdate(@Valid Meal meal, BindingResult result) {
-        ResponseEntity<String> joiner = AdminAjaxController.getStringResponseEntity(result);
+        ResponseEntity<String> joiner = ValidationUtil.getStringResponseEntity(result);
         if (joiner != null) return joiner;
         if (meal.isNew()) {
             super.create(meal);
