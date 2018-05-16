@@ -12,7 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.javawebinar.topjava.util.ValidationUtil;
 import ru.javawebinar.topjava.util.exception.ErrorInfo;
 import ru.javawebinar.topjava.util.exception.ErrorType;
@@ -28,9 +31,9 @@ import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 public class ExceptionInfoHandler {
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
     @Autowired
-    ReloadableResourceBundleMessageSource messageSourceFromCtx;
+    static ReloadableResourceBundleMessageSource messageSourceFromCtx;
 
-    private ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String... details) {
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String... details) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         if (logException) {
             log.error(errorType + " at request " + req.getRequestURL(), rootCause);
@@ -38,7 +41,7 @@ public class ExceptionInfoHandler {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
         BindingResult bindingResult = e instanceof BindException ? ((BindException) e).getBindingResult() : ((MethodArgumentNotValidException) e).getBindingResult();
-        return new ErrorInfo(req.getRequestURL(), e.getClass().getSimpleName(), getErrorDetail(bindingResult, req));
+        return new ErrorInfo(req.getRequestURL(), errorType, getErrorDetail(bindingResult, req));
     }
 
     //  http://stackoverflow.com/a/22358422/548473
@@ -56,7 +59,6 @@ public class ExceptionInfoHandler {
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
-    @ResponseBody
     public ErrorInfo handleValidationError(HttpServletRequest req, Exception e) {
         return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
     }
@@ -66,7 +68,7 @@ public class ExceptionInfoHandler {
         return logAndGetErrorInfo(req, e, true, APP_ERROR);
     }
 
-    private String getErrorDetail(BindingResult result, HttpServletRequest req) {
+    private static String getErrorDetail(BindingResult result, HttpServletRequest req) {
         StringJoiner joiner = new StringJoiner("<br>");
         result.getFieldErrors().forEach(
                 fe -> {
